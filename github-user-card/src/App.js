@@ -1,29 +1,41 @@
 import React from 'react';
-import './App.css';
-import Cards from './components/Cards.js';
 import axios from 'axios';
+import UserCard from './components/UserCard';
+import './App.css';
+
 
 class App extends React.Component {
-  state = {
-    people: []
-  };
+  constructor() {
+    super()
+    this.state ={
+      user: 'alacodes',
+      userData: [],
+      followers: []
+    }
+  }
 
-  componentDidMount = () => {
+  componentDidMount() {
+    this.getUser()
+  }
+
+  getUser() {
     axios
-      .get('https://api.github.com/users/alacodes/followers')
+      .get(`https://api.github.com/users/${this.state.user}`)
       .then(res => {
-        this.setState({ people: res.data });
+        this.setState({userData: res.data})
       })
       .catch(err => {
-        console.log("Error, you idiot", err);
-      });
-  };
+        alert('You id10t: ', err)
+      })
+  }
+
   render() {
+    console.log('user: ', this.state.userData)
     return (
-      <div className="App">
-        <Cards people={this.state.people} />
+      <div className='App'>
+       <UserCard user={this.state.userData} />
       </div>
-    );
+    )
   }
 }
 export default App;
